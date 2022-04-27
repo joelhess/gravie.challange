@@ -1,0 +1,31 @@
+---
+name: Create a Release Tag
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Release version (e.g. v224.1.0)'
+        required: true
+      createStgTag:
+        description: 'Create STG Tag.'
+        type: boolean
+      createPrdTag:
+        description: 'Create PRD Tag.'
+        type: boolean
+
+jobs:
+  tag:
+    name: Tag
+    if: github.event.base_ref == 'refs/heads/main'
+    runs-on: [general]
+    steps:
+      - name: checkout_source
+        uses: actions/checkout@v3
+        with:
+          ref: main
+      - name: Create Tag
+        uses: negz/create-tag@v1
+        with:
+          version: ${{ github.event.inputs.version }}
+          message: "Release ${{ github.event.inputs.version }}"
+          token: ${{ secrets.GITHUB_TOKEN }}
