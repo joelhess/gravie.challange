@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: 'Release version (e.g. v224.1.0)'
+        description: 'Release version (e.g. 224.1.0)'
         required: true
       createStgTag:
         description: 'Create STG Tag.'
@@ -16,7 +16,7 @@ on:
 jobs:
   tag:
     name: Tag
-    if: github.event.base_ref == 'refs/heads/main'
+    if: ${{ github.event.base_ref == 'refs/heads/main' }}
     runs-on: [general]
     steps:
       - name: checkout_source
@@ -26,6 +26,20 @@ jobs:
       - name: Create Tag
         uses: negz/create-tag@v1
         with:
-          version: ${{ github.event.inputs.version }}
+          version: "v${{ github.event.inputs.version }}"
           message: "Release ${{ github.event.inputs.version }}"
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Create Staging Tag
+        uses: negz/create-tag@v1
+        if:  ${{ github.event.inputs.createStgTag == 'true' }} 
+        with:
+          version: "v${{ github.event.inputs.version }}-STG"
+          message: "Release ${{ github.event.inputs.version }} for Staging"
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Create Production Tag
+        uses: negz/create-tag@v1
+        if:  ${{ github.event.inputs.createPrdTag == 'true' }} 
+        with:
+          version: "v${{ github.event.inputs.version }}-PRD"
+          message: "Release ${{ github.event.inputs.version }} for Prod"
           token: ${{ secrets.GITHUB_TOKEN }}
