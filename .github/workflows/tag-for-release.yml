@@ -16,7 +16,7 @@ on:
 jobs:
   tag:
     name: Tag
-    if: ${{ github.event.base_ref == 'refs/heads/main' }}
+    # if: ${{ github.event.base_ref == 'refs/heads/main' }}
     runs-on: [general]
     steps:
       - name: checkout_source
