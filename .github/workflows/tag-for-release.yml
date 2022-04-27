@@ -6,6 +6,10 @@ on:
       version:
         description: 'Release version (e.g. 224.1.0)'
         required: true
+      createDefaultTag:
+        description: 'Create default Tag.'
+        type: boolean
+        default: 'true'
       createStgTag:
         description: 'Create STG Tag.'
         type: boolean
@@ -24,6 +28,7 @@ jobs:
         with:
           ref: main
       - name: Create Tag
+        if:  ${{ github.event.inputs.createDefaultTag == 'true' }} 
         uses: negz/create-tag@v1
         with:
           version: "v${{ github.event.inputs.version }}"
