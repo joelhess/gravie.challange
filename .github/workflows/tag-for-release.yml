@@ -16,7 +16,7 @@ on:
 jobs:
   tag:
     name: Tag
-    if: ${{ github.base_ref == 'refs/heads/main' }}
+    # if: ${{ github.base_ref == 'refs/heads/main' }}
     runs-on: ubuntu-latest
     steps:
       - name: checkout_source
